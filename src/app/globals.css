@@ -24,7 +24,7 @@
     --border: 240 3.7% 15.9%;
     --input: 240 3.7% 15.9%;
     --ring: 263.4 70% 50.4%;
-    --radius: 1rem;
+    --radius: 1.5rem;
   }
 }
 
@@ -33,17 +33,35 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground antialiased;
+    @apply bg-background text-foreground antialiased selection:bg-primary selection:text-white;
     font-feature-settings: "ss01", "ss02", "cv01", "cv02";
   }
 }
 
 .glass {
-  @apply bg-background/60 backdrop-blur-md border-white/10;
+  @apply bg-background/60 backdrop-blur-xl border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.36)];
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 .snap-map-bg {
-  background-image: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.8)), url('https://picsum.photos/seed/map-dark/1200/800');
+  background-image: radial-gradient(circle at center, rgba(139, 92, 246, 0.1) 0%, rgba(0,0,0,0.8) 100%), url('https://picsum.photos/seed/map-dark-city/1600/1200');
   background-size: cover;
   background-position: center;
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
 }
