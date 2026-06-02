@@ -22,6 +22,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     async function getAiRecommendations() {
+      setIsLoadingAi(true);
       try {
         const result = await recommendConnections({
           userInterests: ['Tech', 'Coffee', 'Design'],
@@ -55,8 +56,8 @@ export default function Dashboard() {
       {/* Dynamic Header */}
       <header className="px-4 pt-8 pb-4 flex justify-between items-center sticky top-0 bg-background/80 backdrop-blur-xl z-20">
         <div className="flex flex-col">
-          <h1 className="text-3xl font-black tracking-tighter italic text-primary uppercase">GEOSOCIAL</h1>
-          <p className="text-[8px] uppercase font-black tracking-[0.3em] text-white/40">Reality Unlocked</p>
+          <h1 className="text-3xl font-black tracking-tighter italic text-primary uppercase leading-none">GEOSOCIAL</h1>
+          <p className="text-[8px] uppercase font-black tracking-[0.3em] text-white/40 mt-1">Reality Unlocked</p>
         </div>
         <div className="flex items-center gap-3">
           <Button 
@@ -92,13 +93,12 @@ export default function Dashboard() {
           {MOCK_USERS.map((user) => (
             <div key={user.id} className="flex flex-col items-center gap-1 min-w-[70px] cursor-pointer active:scale-95 transition-transform">
               <div className="h-16 w-16 rounded-3xl p-[3px] bg-gradient-to-tr from-primary to-purple-500">
-                <div className="h-full w-full rounded-[21px] border-2 border-background overflow-hidden bg-secondary">
+                <div className="h-full w-full rounded-[21px] border-2 border-background overflow-hidden bg-secondary relative">
                   <Image 
                     src={user.avatar} 
                     alt={user.name} 
-                    width={60} 
-                    height={60} 
-                    className="object-cover h-full w-full" 
+                    fill 
+                    className="object-cover" 
                   />
                 </div>
               </div>
@@ -154,7 +154,7 @@ export default function Dashboard() {
                 })}
               </div>
             ) : null}
-            <Button size="lg" className="w-full gap-2 rounded-2xl bg-primary shadow-[0_10px_30px_rgba(139,92,246,0.3)] hover:scale-[1.02] active:scale-95 transition-all text-[10px] font-black uppercase italic italic tracking-widest" asChild>
+            <Button size="lg" className="w-full gap-2 rounded-2xl bg-primary shadow-[0_10px_30px_rgba(139,92,246,0.3)] hover:scale-[1.02] active:scale-95 transition-all text-[10px] font-black uppercase italic tracking-widest" asChild>
               <Link href="/map">Meet Nearby <ArrowRight className="h-4 w-4" /></Link>
             </Button>
           </CardContent>

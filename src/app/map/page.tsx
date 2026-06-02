@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { 
   Search, Navigation, Crosshair, X, MessageSquare, UserPlus, 
   List, Map as MapIcon, Sparkles, Activity, ShieldCheck, Wifi, 
-  Globe, Zap, MapPin, Route, History, Bell, Star 
+  Globe, Zap, MapPin, Route, History, Bell, Star, Trophy, ReceiptText 
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -13,6 +13,7 @@ import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
 import { recommendConnections, RecommendConnectionsOutput } from '@/ai/flows/recommend-connections';
+import Image from 'next/image';
 
 type ViewMode = 'map' | 'list' | 'history';
 
@@ -53,7 +54,6 @@ export default function MapPage() {
     }
     getAiRecommendations();
 
-    // Simulated Proximity Notification
     const timer = setTimeout(() => {
       toast({
         title: "Location Alert",
@@ -76,7 +76,7 @@ export default function MapPage() {
     if (!showRoute) {
       toast({
         title: "Route Mapping Initialized",
-        description: "Calculating optimal path to Quantum Coffee...",
+        description: "Calculating optimal path to destination...",
       });
     }
   };
@@ -101,9 +101,12 @@ export default function MapPage() {
         viewMode === 'map' ? "opacity-100" : "opacity-0"
       )}>
         <div className="absolute inset-0 opacity-60">
-          <div 
-            className="w-full h-full bg-[url('https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&w=2074&auto=format&fit=crop')] bg-cover bg-center grayscale contrast-125 brightness-50"
-            style={{ filter: 'grayscale(1) brightness(0.4) contrast(1.5)' }}
+          <Image 
+            src="https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&w=2074&auto=format&fit=crop"
+            alt="Real Map Texture"
+            fill
+            className="object-cover grayscale contrast-125 brightness-[0.3]"
+            priority
           />
         </div>
         
@@ -145,7 +148,7 @@ export default function MapPage() {
              <div className="h-4 w-px bg-white/10" />
              <div className="flex items-center gap-2">
                 <Zap className="h-3 w-3 text-yellow-500" />
-                <span className="text-[8px] font-black tracking-widest uppercase">Encryption Active</span>
+                <span className="text-[8px] font-black tracking-widest uppercase">AES-256 Active</span>
              </div>
           </div>
         </div>
@@ -273,17 +276,28 @@ export default function MapPage() {
                     <span className="text-primary">{user.telemetry.activity}</span>
                   </div>
                 </div>
+                {recommendations?.recommendations.find(r => r.id === user.id)?.compatibilityScore! > 80 && (
+                  <Badge className="bg-primary/20 text-primary border-primary/30 h-6">Match</Badge>
+                )}
               </div>
             ))}
           </div>
         ) : (
           <div className="px-8 h-full overflow-y-auto no-scrollbar pb-48 space-y-4">
-            <h2 className="text-[11px] font-black uppercase tracking-[0.4em] text-white/80 italic mb-6">Location History</h2>
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-[11px] font-black uppercase tracking-[0.4em] text-white/80 italic">Location History</h2>
+              <Trophy className="h-4 w-4 text-yellow-500" />
+            </div>
             {MOCK_HISTORY.map((entry) => (
               <div key={entry.id} className="glass rounded-[1.5rem] p-4 flex justify-between items-center border-white/5">
-                <div>
-                  <h3 className="text-[10px] font-black uppercase italic text-white/90">{entry.placeName}</h3>
-                  <p className="text-[8px] text-white/40 uppercase tracking-widest mt-1">{entry.timestamp}</p>
+                <div className="flex items-center gap-3">
+                  <div className="h-8 w-8 rounded-lg bg-white/5 flex items-center justify-center">
+                    <ReceiptText className="h-4 w-4 text-white/40" />
+                  </div>
+                  <div>
+                    <h3 className="text-[10px] font-black uppercase italic text-white/90">{entry.placeName}</h3>
+                    <p className="text-[8px] text-white/40 uppercase tracking-widest mt-1">{entry.timestamp}</p>
+                  </div>
                 </div>
                 <Badge variant="outline" className="text-[7px] border-primary/20 text-primary uppercase italic">
                   {entry.duration}
@@ -350,21 +364,21 @@ export default function MapPage() {
       {/* FLOATING ACTION BUTTONS */}
       <div className="absolute bottom-32 right-8 flex flex-col gap-4 z-40">
         <button 
-          className="h-12 w-12 rounded-xl glass border-white/10 flex items-center justify-center hover:bg-primary/10 transition-all shadow-xl"
+          className="h-12 w-12 rounded-xl glass border-white/10 flex items-center justify-center hover:bg-primary/10 transition-all shadow-xl pointer-events-auto"
           onClick={handleRecenter}
         >
           <Crosshair className="h-6 w-6 text-primary" />
         </button>
         <button 
           className={cn(
-            "h-12 w-12 rounded-xl border flex items-center justify-center transition-all shadow-xl",
+            "h-12 w-12 rounded-xl border flex items-center justify-center transition-all shadow-xl pointer-events-auto",
             showRoute ? "bg-primary border-primary text-white" : "glass border-white/10 text-white/60"
           )}
           onClick={toggleRoute}
         >
           <Route className="h-6 w-6" />
         </button>
-        <button className="h-14 w-14 rounded-full bg-primary flex items-center justify-center shadow-lg shadow-primary/40">
+        <button className="h-14 w-14 rounded-full bg-primary flex items-center justify-center shadow-lg shadow-primary/40 pointer-events-auto">
           <Navigation className="h-7 w-7 text-white" />
         </button>
       </div>

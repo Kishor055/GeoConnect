@@ -30,6 +30,7 @@ export interface GeoPlace {
   category: 'Cafe' | 'Park' | 'Gym' | 'Tech';
   location: { x: string; y: string };
   rating: number;
+  description: string;
 }
 
 export interface LocationHistoryEntry {
@@ -76,9 +77,9 @@ export const MOCK_USERS: UserProfile[] = [
 ];
 
 export const MOCK_PLACES: GeoPlace[] = [
-  { id: 'p1', name: 'Quantum Coffee', category: 'Cafe', location: { x: '55%', y: '40%' }, rating: 4.8 },
-  { id: 'p2', name: 'Silicon Park', category: 'Park', location: { x: '25%', y: '20%' }, rating: 4.5 },
-  { id: 'p3', name: 'Neon Fitness', category: 'Gym', location: { x: '70%', y: '70%' }, rating: 4.9 },
+  { id: 'p1', name: 'Quantum Coffee', category: 'Cafe', location: { x: '55%', y: '40%' }, rating: 4.8, description: 'Futuristic brews and neon vibes.' },
+  { id: 'p2', name: 'Silicon Park', category: 'Park', location: { x: '25%', y: '20%' }, rating: 4.5, description: 'A green lung for techies.' },
+  { id: 'p3', name: 'Neon Fitness', category: 'Gym', location: { x: '70%', y: '70%' }, rating: 4.9, description: 'High-intensity cyberpunk workouts.' },
 ];
 
 export const MOCK_HISTORY: LocationHistoryEntry[] = [
