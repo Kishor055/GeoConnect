@@ -1,17 +1,16 @@
-
 'use client';
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Map, Home, Play, Users2, User } from 'lucide-react';
+import { Users, LayoutGrid, Camera, Zap, Calendar } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const navItems = [
-  { href: '/', icon: Home, label: 'Home' },
-  { href: '/map', icon: Map, label: 'Map' },
-  { href: '/reels', icon: Play, label: 'Reels' },
-  { href: '/communities', icon: Users2, label: 'Social' },
-  { href: '/profile', icon: User, label: 'Me' },
+  { href: '/chat', icon: Users, label: 'Friends' },
+  { href: '/reels', icon: LayoutGrid, label: 'Stories' },
+  { href: '/', icon: Camera, label: '', center: true },
+  { href: '/feed', icon: Zap, label: 'ZAP' },
+  { href: '/events', icon: Calendar, label: 'Events' },
 ];
 
 export function BottomNav() {
@@ -20,29 +19,39 @@ export function BottomNav() {
   if (pathname === '/auth') return null;
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 flex items-center justify-around bg-background/80 backdrop-blur-xl border-t border-white/5 h-20 px-4 md:hidden pb-safe">
-      {navItems.map((item) => {
+    <nav className="pill-nav px-4 min-w-[340px]">
+      {navItems.map((item, idx) => {
         const isActive = pathname === item.href;
         const Icon = item.icon;
+        
+        if (item.center) {
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              className="relative -top-1"
+            >
+              <div className={cn(
+                "p-3 rounded-full bg-background border-2 transition-all duration-300",
+                isActive ? "border-primary scale-110 shadow-[0_0_20px_rgba(59,130,246,0.5)]" : "border-white/10"
+              )}>
+                <Icon className="h-6 w-6 text-foreground" strokeWidth={2.5} />
+              </div>
+            </Link>
+          );
+        }
+
         return (
           <Link
             key={item.href}
             href={item.href}
             className={cn(
-              "flex flex-col items-center justify-center space-y-1 transition-all flex-1 py-2",
-              isActive ? "text-primary scale-110" : "text-muted-foreground hover:text-foreground"
+              "flex flex-col items-center justify-center flex-1 py-1 px-3 transition-all",
+              isActive ? "text-primary" : "text-muted-foreground hover:text-foreground"
             )}
           >
-            <div className={cn(
-              "p-2 rounded-2xl transition-colors",
-              isActive && "bg-primary/10 shadow-[0_0_15px_rgba(139,92,246,0.3)]"
-            )}>
-              <Icon className={cn("h-6 w-6", isActive ? "stroke-[2.5px]" : "stroke-[1.5px]")} />
-            </div>
-            <span className={cn(
-              "text-[9px] font-bold tracking-tight uppercase transition-opacity duration-300",
-              isActive ? "opacity-100" : "opacity-0"
-            )}>
+            <Icon className={cn("h-5 w-5 mb-1", isActive ? "stroke-[2.5px]" : "stroke-[2px]")} />
+            <span className="text-[10px] font-bold tracking-tight uppercase">
               {item.label}
             </span>
           </Link>
