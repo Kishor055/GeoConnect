@@ -3,21 +3,20 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Map, Home, MessageSquare, Compass, User, Calendar } from 'lucide-react';
+import { Map, Home, Play, Users2, User } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const navItems = [
   { href: '/', icon: Home, label: 'Home' },
   { href: '/map', icon: Map, label: 'Map' },
-  { href: '/events', icon: Calendar, label: 'Events' },
-  { href: '/chat', icon: MessageSquare, label: 'Chat' },
-  { href: '/profile', icon: User, label: 'Profile' },
+  { href: '/reels', icon: Play, label: 'Reels' },
+  { href: '/communities', icon: Users2, label: 'Social' },
+  { href: '/profile', icon: User, label: 'Me' },
 ];
 
 export function BottomNav() {
   const pathname = usePathname();
   
-  // Hide nav on auth page
   if (pathname === '/auth') return null;
 
   return (
@@ -41,7 +40,7 @@ export function BottomNav() {
               <Icon className={cn("h-6 w-6", isActive ? "stroke-[2.5px]" : "stroke-[1.5px]")} />
             </div>
             <span className={cn(
-              "text-[9px] font-bold tracking-tight uppercase",
+              "text-[9px] font-bold tracking-tight uppercase transition-opacity duration-300",
               isActive ? "opacity-100" : "opacity-0"
             )}>
               {item.label}

@@ -2,7 +2,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Sparkles, MapPin, Users, TrendingUp, Calendar, ArrowRight, ShieldCheck, Loader2 } from 'lucide-react';
+import { Sparkles, ArrowRight, ShieldCheck, Loader2, Plus, Bell } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -49,169 +49,150 @@ export default function Dashboard() {
   }, []);
 
   return (
-    <div className="max-w-md mx-auto p-4 space-y-6 min-h-screen pb-24">
-      <header className="flex justify-between items-center py-6">
-        <div>
+    <div className="max-w-md mx-auto space-y-6 min-h-screen pb-24 bg-background">
+      {/* Dynamic Header */}
+      <header className="px-4 pt-8 pb-4 flex justify-between items-center sticky top-0 bg-background/80 backdrop-blur-xl z-20">
+        <div className="flex flex-col">
           <h1 className="text-3xl font-black tracking-tighter italic text-primary">GEOSOCIAL</h1>
-          <p className="text-sm font-medium text-muted-foreground">{greeting}, Alex! ✨</p>
+          <p className="text-[10px] uppercase font-bold tracking-[0.2em] text-muted-foreground/60">Reality Unlocked</p>
         </div>
-        <Link href="/profile">
-          <Avatar className="h-12 w-12 border-2 border-primary shadow-lg shadow-primary/20">
-            <AvatarImage src="https://picsum.photos/seed/me/100/100" />
-            <AvatarFallback>ME</AvatarFallback>
-          </Avatar>
-        </Link>
+        <div className="flex items-center gap-3">
+          <Button variant="ghost" size="icon" className="rounded-full relative">
+            <Bell className="h-5 w-5" />
+            <span className="absolute top-2 right-2 h-2 w-2 bg-red-500 rounded-full" />
+          </Button>
+          <Link href="/profile">
+            <Avatar className="h-10 w-10 ring-2 ring-primary/20">
+              <AvatarImage src="https://picsum.photos/seed/me/100/100" />
+              <AvatarFallback>ME</AvatarFallback>
+            </Avatar>
+          </Link>
+        </div>
       </header>
 
-      {/* Hero Interactive Card */}
-      <Card className="relative h-48 overflow-hidden rounded-3xl border-none glass group">
-        {heroImage && (
-          <Image 
-            src={heroImage.imageUrl} 
-            alt={heroImage.description} 
-            fill 
-            className="object-cover transition-transform duration-700 group-hover:scale-110"
-            data-ai-hint={heroImage.imageHint}
-          />
-        )}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-        <CardContent className="absolute bottom-0 left-0 right-0 p-6 flex justify-between items-end">
-          <div className="space-y-1">
-            <Badge className="bg-primary/80 backdrop-blur-sm border-none mb-2">Featured Discovery</Badge>
-            <h2 className="text-xl font-black text-white leading-tight">Williamsburg Tech Meetup</h2>
-            <p className="text-xs text-white/70 font-medium">350m from your current location</p>
-          </div>
-          <Button size="icon" className="rounded-full bg-white text-black hover:bg-primary hover:text-white">
-            <ArrowRight className="h-5 w-5" />
-          </Button>
-        </CardContent>
-      </Card>
-
-      {/* AI Recommendation Section */}
-      <Card className="bg-gradient-to-br from-primary/30 to-purple-600/30 border-none glass overflow-hidden relative">
-        <div className="absolute top-0 right-0 p-4">
-          <Sparkles className="h-8 w-8 text-white/50 animate-pulse" />
-        </div>
-        <CardHeader className="pb-2">
-          <CardTitle className="text-lg font-bold flex items-center gap-2">
-            AI Connection Matches
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {isLoadingAi ? (
-            <div className="flex flex-col items-center justify-center py-4 space-y-2">
-              <Loader2 className="h-6 w-6 animate-spin text-white" />
-              <p className="text-xs text-white/70">Scanning nearby connections...</p>
+      {/* Stories Row */}
+      <div className="px-4">
+        <div className="flex gap-4 overflow-x-auto no-scrollbar pb-2">
+          <div className="flex flex-col items-center gap-1 min-w-[70px]">
+            <div className="relative h-16 w-16 rounded-3xl border-2 border-dashed border-muted-foreground/30 flex items-center justify-center bg-secondary/20">
+              <Plus className="h-6 w-6 text-muted-foreground" />
             </div>
-          ) : recommendations && recommendations.recommendations.length > 0 ? (
-            <>
-              <p className="text-sm leading-relaxed text-muted-foreground">
-                Found {recommendations.recommendations.length} people with matching interests nearby!
-              </p>
+            <span className="text-[10px] font-bold uppercase opacity-60">Add Story</span>
+          </div>
+          {MOCK_USERS.map((user) => (
+            <div key={user.id} className="flex flex-col items-center gap-1 min-w-[70px]">
+              <div className="h-16 w-16 rounded-3xl p-[3px] bg-gradient-to-tr from-primary to-purple-500">
+                <div className="h-full w-full rounded-[21px] border-2 border-background overflow-hidden bg-secondary">
+                  <Image 
+                    src={user.avatar} 
+                    alt={user.name} 
+                    width={60} 
+                    height={60} 
+                    className="object-cover h-full w-full" 
+                  />
+                </div>
+              </div>
+              <span className="text-[10px] font-bold uppercase truncate w-full text-center">{user.name.split(' ')[0]}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* AI Intelligence Card */}
+      <div className="px-4">
+        <Card className="bg-gradient-to-br from-primary/30 to-purple-600/20 border-none glass overflow-hidden relative rounded-[2rem]">
+          <div className="absolute top-0 right-0 p-4">
+            <Sparkles className="h-8 w-8 text-white/40 animate-pulse" />
+          </div>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-lg font-bold flex items-center gap-2">
+              Neural Discovery
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {isLoadingAi ? (
+              <div className="flex flex-col items-center justify-center py-6 space-y-2">
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                <p className="text-[10px] font-bold uppercase tracking-widest text-primary/60">Analyzing Neighborhood...</p>
+              </div>
+            ) : recommendations && recommendations.recommendations.length > 0 ? (
               <div className="space-y-3">
                 {recommendations.recommendations.slice(0, 2).map((rec) => {
                   const user = MOCK_USERS.find(u => u.id === rec.id);
                   if (!user) return null;
                   return (
-                    <div key={rec.id} className="flex items-center gap-3 bg-white/5 p-2 rounded-xl">
-                      <Avatar className="h-10 w-10">
-                        <AvatarImage src={user.avatar} />
+                    <div key={rec.id} className="flex items-center gap-3 bg-white/5 p-3 rounded-2xl glass-card transition-transform active:scale-95">
+                      <Avatar className="h-12 w-12 rounded-2xl">
+                        <AvatarImage src={user.avatar} className="object-cover" />
                         <AvatarFallback>{user.name[0]}</AvatarFallback>
                       </Avatar>
                       <div className="flex-1 min-w-0">
-                        <p className="text-xs font-bold truncate">{user.name}</p>
-                        <p className="text-[10px] text-white/60 truncate">{rec.matchReason}</p>
+                        <div className="flex items-center justify-between">
+                          <p className="text-xs font-bold truncate">{user.name}</p>
+                          <Badge variant="outline" className="text-[8px] h-4 px-1 border-primary/30 text-primary uppercase font-bold">
+                            {rec.compatibilityScore}% match
+                          </Badge>
+                        </div>
+                        <p className="text-[10px] text-white/60 truncate italic mt-0.5">"{rec.matchReason}"</p>
                       </div>
-                      <Badge variant="outline" className="text-[9px] border-primary/50 text-primary">
-                        {rec.compatibilityScore}% Match
-                      </Badge>
                     </div>
                   );
                 })}
               </div>
-            </>
-          ) : (
-            <p className="text-sm leading-relaxed text-muted-foreground">No matches found right now. Try updating your interests!</p>
+            ) : null}
+            <Button size="lg" className="w-full gap-2 rounded-2xl bg-primary shadow-[0_10px_20px_rgba(139,92,246,0.3)] hover:scale-[1.02] active:scale-95 transition-all text-xs font-bold uppercase" asChild>
+              <Link href="/map">Meet Nearby <ArrowRight className="h-4 w-4" /></Link>
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Featured Location */}
+      <div className="px-4">
+        <Card className="relative h-64 overflow-hidden rounded-[2rem] border-none glass group transition-all">
+          {heroImage && (
+            <Image 
+              src={heroImage.imageUrl} 
+              alt={heroImage.description} 
+              fill 
+              className="object-cover transition-transform duration-1000 group-hover:scale-110"
+              data-ai-hint={heroImage.imageHint}
+            />
           )}
-          <Button size="lg" className="w-full gap-2 rounded-2xl bg-primary shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all" asChild>
-            <Link href="/map">Connect Now <ArrowRight className="h-4 w-4" /></Link>
+          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+          <CardContent className="absolute bottom-0 left-0 right-0 p-6 flex flex-col justify-end h-full">
+            <div className="space-y-1">
+              <Badge className="bg-primary backdrop-blur-sm border-none mb-2 text-[8px] uppercase font-black px-3 py-1">Trending Zone</Badge>
+              <h2 className="text-2xl font-black text-white leading-tight">Bushwick Collective Art Walk</h2>
+              <div className="flex items-center gap-4 mt-2">
+                <div className="flex -space-x-2">
+                  {[1,2,3].map(i => (
+                    <Avatar key={i} className="h-6 w-6 border-2 border-black ring-0">
+                      <AvatarImage src={`https://picsum.photos/seed/a${i}/50/50`} />
+                    </Avatar>
+                  ))}
+                </div>
+                <p className="text-[10px] text-white/70 font-bold uppercase tracking-tight">+142 others here</p>
+              </div>
+            </div>
+          </CardContent>
+          <Button size="icon" className="absolute bottom-6 right-6 rounded-full bg-white text-black hover:bg-primary hover:text-white h-12 w-12 shadow-2xl">
+            <ArrowRight className="h-6 w-6" />
           </Button>
-        </CardContent>
-      </Card>
-
-      {/* Quick Navigation Icons */}
-      <div className="grid grid-cols-2 gap-4">
-        <Link href="/map" className="contents">
-          <Card className="hover:bg-accent/40 transition-all cursor-pointer border-none bg-secondary/20 glass group active:scale-95">
-            <CardContent className="p-6 flex flex-col items-center gap-3">
-              <div className="p-4 rounded-3xl bg-blue-500/20 text-blue-400 group-hover:bg-blue-500 group-hover:text-white transition-all">
-                <MapPin className="h-8 w-8" />
-              </div>
-              <span className="text-xs font-black uppercase tracking-widest text-muted-foreground group-hover:text-foreground">Explore Map</span>
-            </CardContent>
-          </Card>
-        </Link>
-        <Link href="/feed" className="contents">
-          <Card className="hover:bg-accent/40 transition-all cursor-pointer border-none bg-secondary/20 glass group active:scale-95">
-            <CardContent className="p-6 flex flex-col items-center gap-3">
-              <div className="p-4 rounded-3xl bg-orange-500/20 text-orange-400 group-hover:bg-orange-500 group-hover:text-white transition-all">
-                <TrendingUp className="h-8 w-8" />
-              </div>
-              <span className="text-xs font-black uppercase tracking-widest text-muted-foreground group-hover:text-foreground">Local Feed</span>
-            </CardContent>
-          </Card>
-        </Link>
+        </Card>
       </div>
 
-      {/* Trust & Safety Banner */}
-      <div className="bg-green-500/10 border border-green-500/20 glass rounded-2xl py-3 px-4 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <ShieldCheck className="h-5 w-5 text-green-500" />
-          <span className="text-xs font-medium text-green-200">Safe Mode Active</span>
+      {/* Safety Banner */}
+      <div className="px-4">
+        <div className="bg-green-500/5 border border-green-500/20 glass rounded-2xl py-3 px-4 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
+            <ShieldCheck className="h-5 w-5 text-green-500" />
+            <span className="text-[10px] font-bold text-green-200 uppercase tracking-widest">Quantum Encryption Active</span>
+          </div>
+          <Badge variant="outline" className="text-[8px] border-green-500/30 text-green-500 bg-green-500/10 font-bold uppercase">Safe Zone</Badge>
         </div>
-        <Badge variant="outline" className="text-[9px] border-green-500/30 text-green-500 bg-green-500/5">Approx. Location</Badge>
       </div>
-
-      {/* Upcoming Nearby Section */}
-      <section className="space-y-4">
-        <div className="flex justify-between items-center px-1">
-          <h2 className="text-lg font-black tracking-tight flex items-center gap-2 uppercase">
-            <Calendar className="h-5 w-5 text-primary" />
-            Nearby Meetups
-          </h2>
-          <Button variant="link" size="sm" className="text-primary font-bold p-0" asChild>
-            <Link href="/events">See All</Link>
-          </Button>
-        </div>
-        
-        <div className="space-y-4">
-          {[
-            { title: 'Indie Creator Meet', location: 'Design Hub', time: 'In 2 hours', attendees: 12, date: '14' },
-            { title: 'Morning Run', location: 'McCarren Park', time: 'Tomorrow 8AM', attendees: 8, date: '15' }
-          ].map((event, i) => (
-            <Card key={i} className="bg-secondary/10 border-none glass hover:bg-secondary/20 transition-colors cursor-pointer group">
-              <CardContent className="p-4 flex items-center gap-4">
-                <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-primary/20 to-purple-500/20 flex flex-col items-center justify-center text-primary border border-white/5 shadow-inner">
-                  <span className="text-lg font-black">{event.date}</span>
-                  <span className="text-[8px] uppercase font-bold">OCT</span>
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="font-black text-sm truncate group-hover:text-primary transition-colors">{event.title}</p>
-                  <p className="text-[10px] text-muted-foreground truncate uppercase font-bold tracking-tight">
-                    {event.location} • {event.time}
-                  </p>
-                </div>
-                <div className="flex flex-col items-end gap-1">
-                  <Badge className="bg-primary/10 text-primary text-[8px] h-5 rounded-lg border-none">
-                    {event.attendees} going
-                  </Badge>
-                  <Button size="sm" variant="ghost" className="h-8 text-[10px] font-black hover:bg-primary/10">RSVP</Button>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </section>
     </div>
   );
 }

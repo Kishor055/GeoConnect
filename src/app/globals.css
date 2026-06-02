@@ -39,7 +39,11 @@
 }
 
 .glass {
-  @apply bg-background/60 backdrop-blur-xl border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.36)];
+  @apply bg-background/60 backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.36)];
+}
+
+.glass-card {
+  @apply bg-white/5 backdrop-blur-lg border border-white/10 shadow-xl;
 }
 
 .no-scrollbar::-webkit-scrollbar {
@@ -64,4 +68,15 @@
 
 .animate-float {
   animation: float 3s ease-in-out infinite;
+}
+
+.reels-container {
+  height: calc(100vh - 80px);
+  scroll-snap-type: y mandatory;
+  overflow-y: scroll;
+}
+
+.reel-item {
+  height: calc(100vh - 80px);
+  scroll-snap-align: start;
 }
