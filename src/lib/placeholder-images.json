@@ -29,6 +29,24 @@
       "description": "People enjoying coffee",
       "imageUrl": "https://picsum.photos/seed/cafe/600/800",
       "imageHint": "friends cafe"
+    },
+    {
+      "id": "event-tech",
+      "description": "Tech networking mixer",
+      "imageUrl": "https://picsum.photos/seed/tech/800/400",
+      "imageHint": "tech mixer"
+    },
+    {
+      "id": "event-garden",
+      "description": "Community garden cleanup",
+      "imageUrl": "https://picsum.photos/seed/garden/800/400",
+      "imageHint": "community garden"
+    },
+    {
+      "id": "event-film",
+      "description": "Indie film screening",
+      "imageUrl": "https://picsum.photos/seed/film/800/400",
+      "imageHint": "cinema crowd"
     }
   ]
 }
