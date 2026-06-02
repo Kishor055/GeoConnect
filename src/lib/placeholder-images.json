@@ -1,3 +1,16 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "hero-event",
+      "description": "A vibrant community event gathering",
+      "imageUrl": "https://picsum.photos/seed/123/1200/600",
+      "imageHint": "community event"
+    },
+    {
+      "id": "user-avatar",
+      "description": "User profile placeholder",
+      "imageUrl": "https://picsum.photos/seed/45/200/200",
+      "imageHint": "portrait person"
+    }
+  ]
 }
