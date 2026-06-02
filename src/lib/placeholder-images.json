@@ -11,6 +11,24 @@
       "description": "User profile placeholder",
       "imageUrl": "https://picsum.photos/seed/45/200/200",
       "imageHint": "portrait person"
+    },
+    {
+      "id": "map-background",
+      "description": "Abstract map background",
+      "imageUrl": "https://picsum.photos/seed/map1/1200/800",
+      "imageHint": "satellite map"
+    },
+    {
+      "id": "post-image-1",
+      "description": "Local city landmark",
+      "imageUrl": "https://picsum.photos/seed/city1/600/800",
+      "imageHint": "city landmark"
+    },
+    {
+      "id": "post-image-2",
+      "description": "People enjoying coffee",
+      "imageUrl": "https://picsum.photos/seed/cafe/600/800",
+      "imageHint": "friends cafe"
     }
   ]
 }

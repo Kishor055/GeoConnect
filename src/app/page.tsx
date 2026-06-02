@@ -1,130 +1,149 @@
-import Link from 'next/link';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
-import Image from 'next/image';
-import { Sparkles, Calendar, User, ArrowRight } from 'lucide-react';
+'use client';
 
-export default function Home() {
-  const heroImage = PlaceHolderImages.find(img => img.id === 'hero-event');
+import { useEffect, useState } from 'react';
+import { Sparkles, MapPin, Users, TrendingUp, Calendar, ArrowRight } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import Link from 'next/link';
+import Image from 'next/image';
+
+export default function Dashboard() {
+  const [greeting, setGreeting] = useState('Hello');
+
+  useEffect(() => {
+    const hour = new Date().getHours();
+    if (hour < 12) setGreeting('Good Morning');
+    else if (hour < 18) setGreeting('Good Afternoon');
+    else setGreeting('Good Evening');
+  }, []);
 
   return (
-    <div className="flex flex-col min-h-screen">
-      {/* Navigation */}
-      <header className="px-4 lg:px-6 h-14 flex items-center border-b">
-        <Link className="flex items-center justify-center" href="#">
-          <Sparkles className="h-6 w-6 mr-2" />
-          <span className="font-bold">Firebase Studio App</span>
-        </Link>
-        <nav className="ml-auto flex gap-4 sm:gap-6">
-          <Link className="text-sm font-medium hover:underline underline-offset-4" href="#">
-            Features
-          </Link>
-          <Link className="text-sm font-medium hover:underline underline-offset-4" href="#">
-            AI Tools
-          </Link>
-          <Link className="text-sm font-medium hover:underline underline-offset-4" href="#">
-            Profile
-          </Link>
-        </nav>
+    <div className="max-w-md mx-auto p-4 space-y-6 min-h-screen">
+      <header className="flex justify-between items-center py-4">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight">{greeting}, User!</h1>
+          <p className="text-sm text-muted-foreground">Discover what is happening nearby.</p>
+        </div>
+        <Avatar className="h-12 w-12 border-2 border-primary">
+          <AvatarImage src="https://picsum.photos/seed/me/100/100" />
+          <AvatarFallback>ME</AvatarFallback>
+        </Avatar>
       </header>
 
-      <main className="flex-1">
-        {/* Hero Section */}
-        <section className="w-full py-12 md:py-24 lg:py-32 bg-muted/40">
-          <div className="container px-4 md:px-6 mx-auto">
-            <div className="grid gap-6 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[1fr_600px]">
-              <div className="flex flex-col justify-center space-y-4">
-                <div className="space-y-2">
-                  <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
-                    Intelligent Management for Your Community
-                  </h1>
-                  <p className="max-w-[600px] text-muted-foreground md:text-xl">
-                    Leverage GenAI to summarize events, profile bios, and streamline your community workflows effortlessly.
-                  </p>
-                </div>
-                <div className="flex flex-col gap-2 min-[400px]:flex-row">
-                  <Button size="lg" className="gap-2">
-                    Get Started <ArrowRight className="h-4 w-4" />
-                  </Button>
-                  <Button size="lg" variant="outline">
-                    View Demo
-                  </Button>
-                </div>
-              </div>
-              {heroImage && (
-                <div className="mx-auto aspect-video overflow-hidden rounded-xl object-cover sm:w-full lg:order-last">
-                  <Image
-                    alt={heroImage.description}
-                    className="object-cover w-full h-full"
-                    height={400}
-                    src={heroImage.imageUrl}
-                    width={600}
-                    data-ai-hint={heroImage.imageHint}
-                  />
-                </div>
-              )}
+      {/* AI Recommendation Banner */}
+      <Card className="bg-gradient-to-br from-primary/20 to-purple-500/20 border-primary/20 overflow-hidden relative">
+        <div className="absolute top-0 right-0 p-4">
+          <Sparkles className="h-8 w-8 text-primary animate-pulse" />
+        </div>
+        <CardHeader>
+          <CardTitle className="text-lg flex items-center gap-2">
+            AI Smart Suggestions
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <p className="text-sm">Based on your love for <Badge variant="secondary">Coffee</Badge> and <Badge variant="secondary">Tech</Badge>, we found 3 people you should meet nearby.</p>
+          <div className="flex -space-x-3 overflow-hidden">
+            {[1, 2, 3].map((i) => (
+              <Avatar key={i} className="border-2 border-background h-10 w-10">
+                <AvatarImage src={`https://picsum.photos/seed/suggest${i}/100/100`} />
+              </Avatar>
+            ))}
+            <div className="h-10 w-10 rounded-full bg-secondary flex items-center justify-center text-[10px] font-bold border-2 border-background">
+              +12
             </div>
           </div>
-        </section>
+          <Button size="sm" className="w-full gap-2">
+            View Recommendations <ArrowRight className="h-4 w-4" />
+          </Button>
+        </CardContent>
+      </Card>
 
-        {/* Features Section */}
-        <section className="w-full py-12 md:py-24 lg:py-32">
-          <div className="container px-4 md:px-6 mx-auto">
-            <div className="flex flex-col items-center justify-center space-y-4 text-center">
-              <div className="space-y-2">
-                <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">AI-Powered Workflows</h2>
-                <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                  Our application comes pre-configured with Genkit flows to help you manage content smarter.
-                </p>
+      {/* Quick Actions */}
+      <div className="grid grid-cols-2 gap-4">
+        <Link href="/map" className="contents">
+          <Card className="hover:bg-accent transition-colors cursor-pointer border-none bg-secondary/30">
+            <CardContent className="p-4 flex flex-col items-center gap-2">
+              <div className="p-3 rounded-full bg-blue-500/20 text-blue-500">
+                <MapPin className="h-6 w-6" />
               </div>
-            </div>
-            <div className="mx-auto grid max-w-5xl items-center gap-6 py-12 lg:grid-cols-2 lg:gap-12">
-              <Card>
-                <CardHeader>
-                  <Calendar className="h-10 w-10 mb-2 text-primary" />
-                  <CardTitle>Event Summarizer</CardTitle>
-                  <CardDescription>
-                    Automatically generate concise summaries for long event descriptions.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground">
-                    Save time by getting the gist of any gathering instantly. Perfect for busy community managers.
-                  </p>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardHeader>
-                  <User className="h-10 w-10 mb-2 text-primary" />
-                  <CardTitle>Bio Summarizer</CardTitle>
-                  <CardDescription>
-                    Distill long user bios into punchy, one-sentence profiles.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground">
-                    Keep your user directory clean and readable with AI-driven bio condensation.
-                  </p>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-        </section>
-      </main>
+              <span className="text-sm font-bold">Live Map</span>
+            </CardContent>
+          </Card>
+        </Link>
+        <Link href="/feed" className="contents">
+          <Card className="hover:bg-accent transition-colors cursor-pointer border-none bg-secondary/30">
+            <CardContent className="p-4 flex flex-col items-center gap-2">
+              <div className="p-3 rounded-full bg-orange-500/20 text-orange-500">
+                <TrendingUp className="h-6 w-6" />
+              </div>
+              <span className="text-sm font-bold">Trending</span>
+            </CardContent>
+          </Card>
+        </Link>
+      </div>
 
-      {/* Footer */}
-      <footer className="flex flex-col gap-2 sm:flex-row py-6 w-full shrink-0 items-center px-4 md:px-6 border-t">
-        <p className="text-xs text-muted-foreground">© 2024 Firebase Studio. All rights reserved.</p>
-        <nav className="sm:ml-auto flex gap-4 sm:gap-6">
-          <Link className="text-xs hover:underline underline-offset-4" href="#">
-            Terms of Service
-          </Link>
-          <Link className="text-xs hover:underline underline-offset-4" href="#">
-            Privacy
-          </Link>
-        </nav>
-      </footer>
+      {/* Nearby Events */}
+      <section className="space-y-4">
+        <div className="flex justify-between items-center">
+          <h2 className="text-lg font-bold flex items-center gap-2">
+            <Calendar className="h-5 w-5 text-primary" />
+            Nearby Events
+          </h2>
+          <Button variant="link" size="sm" className="text-primary">See all</Button>
+        </div>
+        
+        <div className="space-y-3">
+          {[
+            { title: 'Tech Meetup', location: 'Innovation Hub', time: 'Today, 6:00 PM' },
+            { title: 'Morning Yoga', location: 'Central Park', time: 'Tomorrow, 8:00 AM' }
+          ].map((event, i) => (
+            <Card key={i} className="bg-secondary/20 border-none">
+              <CardContent className="p-3 flex items-center gap-4">
+                <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary font-bold">
+                  {i + 14}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="font-bold truncate">{event.title}</p>
+                  <p className="text-xs text-muted-foreground truncate">{event.location} • {event.time}</p>
+                </div>
+                <Button size="sm" variant="ghost">RSVP</Button>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </section>
+
+      {/* Nearby Discovery */}
+      <section className="space-y-4 pb-20">
+        <h2 className="text-lg font-bold flex items-center gap-2">
+          <Users className="h-5 w-5 text-primary" />
+          Discovery
+        </h2>
+        <div className="grid grid-cols-2 gap-3">
+          {[1, 2, 3, 4].map((i) => (
+            <Card key={i} className="overflow-hidden border-none bg-secondary/30">
+              <div className="relative aspect-square">
+                <Image 
+                  src={`https://picsum.photos/seed/discovery${i}/300/300`} 
+                  alt="Discovery" 
+                  fill 
+                  className="object-cover"
+                  data-ai-hint="person portrait"
+                />
+                <div className="absolute top-2 right-2">
+                  <Badge className="bg-green-500 text-[8px] h-4">Online</Badge>
+                </div>
+              </div>
+              <div className="p-2 text-center">
+                <p className="text-xs font-bold">User {i}</p>
+                <p className="text-[10px] text-muted-foreground">Designer • 2km</p>
+              </div>
+            </Card>
+          ))}
+        </div>
+      </section>
     </div>
   );
 }
