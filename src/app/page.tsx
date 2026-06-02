@@ -2,7 +2,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Sparkles, MapPin, Users, TrendingUp, Calendar, ArrowRight, ShieldCheck } from 'lucide-react';
+import { Sparkles, MapPin, Users, TrendingUp, Calendar, ArrowRight, ShieldCheck, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -10,9 +10,14 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import Link from 'next/link';
 import Image from 'next/image';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
+import { recommendConnections, RecommendConnectionsOutput } from '@/ai/flows/recommend-connections';
+import { MOCK_USERS } from '@/lib/mock-data';
 
 export default function Dashboard() {
   const [greeting, setGreeting] = useState('Hello');
+  const [recommendations, setRecommendations] = useState<RecommendConnectionsOutput | null>(null);
+  const [isLoadingAi, setIsLoadingAi] = useState(true);
+  
   const heroImage = PlaceHolderImages.find(img => img.id === 'hero-event');
 
   useEffect(() => {
@@ -20,6 +25,27 @@ export default function Dashboard() {
     if (hour < 12) setGreeting('Good Morning');
     else if (hour < 18) setGreeting('Good Afternoon');
     else setGreeting('Good Evening');
+
+    async function getAiRecommendations() {
+      try {
+        const result = await recommendConnections({
+          userInterests: ['Tech', 'Coffee', 'Design'],
+          nearbyProfiles: MOCK_USERS.map(u => ({
+            id: u.id,
+            name: u.name,
+            bio: u.bio,
+            interests: u.interests,
+            distance: u.distance
+          }))
+        });
+        setRecommendations(result);
+      } catch (err) {
+        console.error('AI Flow error:', err);
+      } finally {
+        setIsLoadingAi(false);
+      }
+    }
+    getAiRecommendations();
   }, []);
 
   return (
@@ -72,18 +98,41 @@ export default function Dashboard() {
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <p className="text-sm leading-relaxed text-muted-foreground">3 people with matching interests are hanging out nearby!</p>
-          <div className="flex -space-x-3 overflow-hidden py-2">
-            {[1, 2, 3, 4].map((i) => (
-              <Avatar key={i} className="border-2 border-background h-10 w-10 shadow-lg ring-1 ring-white/10">
-                <AvatarImage src={`https://picsum.photos/seed/suggest${i}/100/100`} />
-                <AvatarFallback>U</AvatarFallback>
-              </Avatar>
-            ))}
-            <div className="h-10 w-10 rounded-full bg-secondary flex items-center justify-center text-[10px] font-bold border-2 border-background shadow-lg">
-              +12
+          {isLoadingAi ? (
+            <div className="flex flex-col items-center justify-center py-4 space-y-2">
+              <Loader2 className="h-6 w-6 animate-spin text-white" />
+              <p className="text-xs text-white/70">Scanning nearby connections...</p>
             </div>
-          </div>
+          ) : recommendations && recommendations.recommendations.length > 0 ? (
+            <>
+              <p className="text-sm leading-relaxed text-muted-foreground">
+                Found {recommendations.recommendations.length} people with matching interests nearby!
+              </p>
+              <div className="space-y-3">
+                {recommendations.recommendations.slice(0, 2).map((rec) => {
+                  const user = MOCK_USERS.find(u => u.id === rec.id);
+                  if (!user) return null;
+                  return (
+                    <div key={rec.id} className="flex items-center gap-3 bg-white/5 p-2 rounded-xl">
+                      <Avatar className="h-10 w-10">
+                        <AvatarImage src={user.avatar} />
+                        <AvatarFallback>{user.name[0]}</AvatarFallback>
+                      </Avatar>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-xs font-bold truncate">{user.name}</p>
+                        <p className="text-[10px] text-white/60 truncate">{rec.matchReason}</p>
+                      </div>
+                      <Badge variant="outline" className="text-[9px] border-primary/50 text-primary">
+                        {rec.compatibilityScore}% Match
+                      </Badge>
+                    </div>
+                  );
+                })}
+              </div>
+            </>
+          ) : (
+            <p className="text-sm leading-relaxed text-muted-foreground">No matches found right now. Try updating your interests!</p>
+          )}
           <Button size="lg" className="w-full gap-2 rounded-2xl bg-primary shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all" asChild>
             <Link href="/map">Connect Now <ArrowRight className="h-4 w-4" /></Link>
           </Button>
