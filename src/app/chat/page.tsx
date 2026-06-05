@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useMemo } from 'react';
@@ -8,28 +7,21 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
+import { MOCK_CHATS, ChatEntry } from '@/lib/mock-data';
 import { cn } from '@/lib/utils';
-
-const INITIAL_CHATS = [
-  { id: '1', name: 'Jhonny Bairstow', status: '37 Min ago', distance: '1.2 mi', avatar: 'https://picsum.photos/seed/b1/100/100', lastMsg: 'Yo, are you heading to the mixer?' },
-  { id: '2', name: 'John Smith', status: 'Active Now', distance: '1.2 mi', avatar: 'https://picsum.photos/seed/b2/100/100', lastMsg: 'That spot is amazing!' },
-  { id: '3', name: 'Jane Cooper', status: 'Active Now', distance: '1.2 mi', avatar: 'https://picsum.photos/seed/b3/100/100', lastMsg: 'Sent a photo' },
-  { id: '4', name: 'Sara Jonson', status: '40 Min ago', distance: '1.2 mi', avatar: 'https://picsum.photos/seed/b4/100/100', lastMsg: 'See you there!' },
-  { id: '5', name: 'Emma', status: 'Active Now', distance: '1.2 mi', avatar: 'https://picsum.photos/seed/b5/100/100', lastMsg: 'Haha sounds good' },
-];
 
 export default function ChatListPage() {
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedChat, setSelectedChat] = useState<typeof INITIAL_CHATS[0] | null>(null);
+  const [selectedChat, setSelectedChat] = useState<ChatEntry | null>(null);
   const { toast } = useToast();
 
   const filteredChats = useMemo(() => {
-    return INITIAL_CHATS.filter(chat => 
+    return MOCK_CHATS.filter(chat => 
       chat.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
   }, [searchQuery]);
 
-  const handleOpenChat = (chat: typeof INITIAL_CHATS[0]) => {
+  const handleOpenChat = (chat: ChatEntry) => {
     setSelectedChat(chat);
   };
 
@@ -61,7 +53,7 @@ export default function ChatListPage() {
         <div className="relative">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-white/40" />
           <Input 
-            placeholder="Search messages..." 
+            placeholder="Search signals..." 
             className="bg-white/5 border-none rounded-2xl pl-12 h-12 text-sm focus-visible:ring-primary"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -108,8 +100,8 @@ export default function ChatListPage() {
 
       {/* Mock Chat Window Overlay */}
       {selectedChat && (
-        <div className="absolute inset-0 z-50 bg-black animate-in slide-in-from-right duration-300 flex flex-col">
-          <header className="p-4 border-b border-white/10 flex items-center justify-between">
+        <div className="fixed inset-0 z-[100] bg-black animate-in slide-in-from-right duration-300 flex flex-col max-w-md mx-auto">
+          <header className="p-4 border-b border-white/10 flex items-center justify-between bg-black">
             <div className="flex items-center gap-3">
               <Button variant="ghost" size="icon" onClick={() => setSelectedChat(null)} className="h-10 w-10">
                 <X className="h-6 w-6" />
@@ -126,12 +118,14 @@ export default function ChatListPage() {
             <Button variant="ghost" size="icon" className="text-white/60"><Camera className="h-5 w-5" /></Button>
           </header>
           
-          <ScrollArea className="flex-1 p-6 space-y-6">
-            <div className="bg-white/5 rounded-2xl p-4 max-w-[80%] text-[11px] leading-relaxed">
-              {selectedChat.lastMsg}
-            </div>
-            <div className="bg-primary/20 border border-primary/20 rounded-2xl p-4 max-w-[80%] ml-auto text-[11px] leading-relaxed text-right">
-              On my way! Just checking the Map Lab for the fastest route.
+          <ScrollArea className="flex-1 p-6">
+            <div className="space-y-6">
+              <div className="bg-white/5 rounded-2xl p-4 max-w-[80%] text-[11px] leading-relaxed">
+                {selectedChat.lastMsg}
+              </div>
+              <div className="bg-primary/20 border border-primary/20 rounded-2xl p-4 max-w-[80%] ml-auto text-[11px] leading-relaxed text-right">
+                On my way! Just checking the Map Lab for the fastest route.
+              </div>
             </div>
           </ScrollArea>
 

@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState } from 'react';
@@ -8,27 +7,7 @@ import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
-
-const REELS = [
-  {
-    id: 'r1',
-    user: { name: 'Elena Fisher', avatar: 'https://picsum.photos/seed/user1/100/100', followed: false },
-    content: 'https://picsum.photos/seed/reel1/1080/1920',
-    caption: 'Chasing sunsets in Brooklyn 🌅 #citylife #vibes',
-    likes: 12400,
-    comments: 456,
-    music: 'Midnight City - M83'
-  },
-  {
-    id: 'r2',
-    user: { name: 'Marcus Wright', avatar: 'https://picsum.photos/seed/user2/100/100', followed: true },
-    content: 'https://picsum.photos/seed/reel2/1080/1920',
-    caption: 'Morning brew perfection at The Local Grind ☕️',
-    likes: 8200,
-    comments: 231,
-    music: 'Coffee Shop Jazz'
-  }
-];
+import { MOCK_REELS } from '@/lib/mock-data';
 
 export default function ReelsPage() {
   const { toast } = useToast();
@@ -51,8 +30,8 @@ export default function ReelsPage() {
   };
 
   return (
-    <div className="max-w-md mx-auto bg-black h-screen overflow-y-scroll snap-y snap-mandatory no-scrollbar">
-      {REELS.map((reel) => {
+    <div className="max-w-md mx-auto bg-black h-screen overflow-y-scroll snap-y snap-mandatory no-scrollbar pb-16">
+      {MOCK_REELS.map((reel) => {
         const isLiked = likedReels[reel.id];
         const isFollowed = followedUsers[reel.user.name] || reel.user.followed;
 
@@ -118,7 +97,7 @@ export default function ReelsPage() {
                   variant="ghost" 
                   size="icon" 
                   className="h-12 w-12 rounded-full bg-white/10 backdrop-blur-md text-white hover:bg-white/20"
-                  onClick={() => toast({ title: "Comments", description: "Feature deploying soon..." })}
+                  onClick={() => toast({ title: "Comments", description: "Join the conversation on the Feed." })}
                 >
                   <MessageCircle className="h-7 w-7" />
                 </Button>
@@ -129,7 +108,7 @@ export default function ReelsPage() {
                 variant="ghost" 
                 size="icon" 
                 className="h-12 w-12 rounded-full bg-white/10 backdrop-blur-md text-white"
-                onClick={() => toast({ title: "Shared", description: "Signal copied to clipboard." })}
+                onClick={() => toast({ title: "Shared", description: "Signal link copied to clipboard." })}
               >
                 <Share2 className="h-7 w-7" />
               </Button>

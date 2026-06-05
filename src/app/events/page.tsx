@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Calendar, MapPin, Users, Filter, Plus, Search, CheckCircle2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -10,45 +10,23 @@ import Image from 'next/image';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
-
-const eventData = [
-  {
-    id: '1',
-    title: 'Rooftop Tech Mixer',
-    date: 'Fri, Oct 24 • 7:00 PM',
-    location: 'Cloud 9 Lounge, Manhattan',
-    attendees: 42,
-    placeholderId: 'event-tech',
-    category: 'Networking',
-    price: 'Free'
-  },
-  {
-    id: '2',
-    title: 'Community Garden Cleanup',
-    date: 'Sat, Oct 25 • 9:00 AM',
-    location: 'Prospect Park South',
-    attendees: 15,
-    placeholderId: 'event-garden',
-    category: 'Volunteer',
-    price: 'Free'
-  },
-  {
-    id: '3',
-    title: 'Indie Film Night',
-    date: 'Sun, Oct 26 • 8:30 PM',
-    location: 'The Bioscope Cinema',
-    attendees: 28,
-    placeholderId: 'event-film',
-    category: 'Entertainment',
-    price: '$15'
-  }
-];
+import { MOCK_EVENTS } from '@/lib/mock-data';
 
 export default function EventsPage() {
   const [activeCategory, setActiveCategory] = useState('All');
+  const [searchQuery, setSearchQuery] = useState('');
   const [rsvps, setRsvps] = useState<Record<string, boolean>>({});
   const { toast } = useToast();
   const categories = ['All', 'Networking', 'Volunteer', 'Entertainment', 'Fitness', 'Food'];
+
+  const filteredEvents = useMemo(() => {
+    return MOCK_EVENTS.filter(event => {
+      const matchesCategory = activeCategory === 'All' || event.category === activeCategory;
+      const matchesSearch = event.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                           event.location.toLowerCase().includes(searchQuery.toLowerCase());
+      return matchesCategory && matchesSearch;
+    });
+  }, [activeCategory, searchQuery]);
 
   const toggleRSVP = (eventId: string, title: string) => {
     const isGoing = !rsvps[eventId];
@@ -68,7 +46,7 @@ export default function EventsPage() {
             size="icon" 
             variant="ghost" 
             className="rounded-2xl bg-primary/10 text-primary hover:bg-primary/20 transition-all active:scale-90"
-            onClick={() => toast({ title: "Feature Pending", description: "Event creation coming soon!" })}
+            onClick={() => toast({ title: "Signal Origin", description: "You are the center of discovery." })}
           >
             <Plus className="h-6 w-6" />
           </Button>
@@ -76,7 +54,12 @@ export default function EventsPage() {
         <div className="flex gap-2">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input placeholder="Find events..." className="pl-10 bg-secondary/30 border-none rounded-xl h-11" />
+            <Input 
+              placeholder="Find local signals..." 
+              className="pl-10 bg-secondary/30 border-none rounded-xl h-11" 
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
           </div>
           <Button variant="secondary" size="icon" className="rounded-xl h-11 w-11 bg-white/5">
             <Filter className="h-5 w-5" />
@@ -100,7 +83,7 @@ export default function EventsPage() {
       </header>
 
       <div className="p-4 space-y-6 mt-2">
-        {eventData.map((event) => {
+        {filteredEvents.map((event) => {
           const img = PlaceHolderImages.find(p => p.id === event.placeholderId);
           const isGoing = rsvps[event.id];
           return (
@@ -158,15 +141,20 @@ export default function EventsPage() {
                   <Button 
                     variant="outline" 
                     className="glass border-white/10 rounded-2xl h-11 px-6 font-black uppercase italic text-[10px]"
-                    onClick={() => toast({ title: "Share Link", description: "Event link copied to clipboard!" })}
+                    onClick={() => toast({ title: "Share Signal", description: "Event link broadcasted to your network!" })}
                   >
                     Share
                   </Button>
                 </div>
               </CardContent>
             </Card>
-          );
-        })}
+          ))}
+          {filteredEvents.length === 0 && (
+            <div className="text-center py-20 space-y-4">
+              <p className="text-sm text-white/40 font-black italic uppercase">No signals in this sector</p>
+              <Button variant="link" className="text-primary text-[10px] uppercase font-black" onClick={() => { setActiveCategory('All'); setSearchQuery(''); }}>Reset HUD</Button>
+            </div>
+          )}
       </div>
     </div>
   );
