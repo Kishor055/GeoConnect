@@ -1,3 +1,4 @@
+
 'use server';
 
 /**
@@ -24,7 +25,14 @@ export type SummarizeUserProfileBioOutput = z.infer<typeof SummarizeUserProfileB
 export async function summarizeUserProfileBio(
   input: SummarizeUserProfileBioInput
 ): Promise<SummarizeUserProfileBioOutput> {
-  return summarizeUserProfileBioFlow(input);
+  try {
+    return await summarizeUserProfileBioFlow(input);
+  } catch (error) {
+    console.error('AI summarizeUserProfileBio error:', error);
+    return {
+      summary: input.bio.length > 50 ? input.bio.substring(0, 47) + '...' : input.bio,
+    };
+  }
 }
 
 const prompt = ai.definePrompt({

@@ -1,3 +1,4 @@
+
 'use server';
 /**
  * @fileOverview A GenAI flow to generate Instagram-optimized captions and hashtags.
@@ -23,7 +24,15 @@ const InstaCaptionOutputSchema = z.object({
 export type InstaCaptionOutput = z.infer<typeof InstaCaptionOutputSchema>;
 
 export async function generateInstaCaption(input: InstaCaptionInput): Promise<InstaCaptionOutput> {
-  return generateInstaCaptionFlow(input);
+  try {
+    return await generateInstaCaptionFlow(input);
+  } catch (error) {
+    console.error('AI generateInstaCaption error:', error);
+    return {
+      caption: input.description,
+      hashtags: ['#social', '#nearby', '#explore'],
+    };
+  }
 }
 
 const prompt = ai.definePrompt({
