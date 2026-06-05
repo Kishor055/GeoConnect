@@ -148,13 +148,14 @@ export default function EventsPage() {
                 </div>
               </CardContent>
             </Card>
-          ))}
-          {filteredEvents.length === 0 && (
-            <div className="text-center py-20 space-y-4">
-              <p className="text-sm text-white/40 font-black italic uppercase">No signals in this sector</p>
-              <Button variant="link" className="text-primary text-[10px] uppercase font-black" onClick={() => { setActiveCategory('All'); setSearchQuery(''); }}>Reset HUD</Button>
-            </div>
-          )}
+          );
+        })}
+        {filteredEvents.length === 0 && (
+          <div className="text-center py-20 space-y-4">
+            <p className="text-sm text-white/40 font-black italic uppercase">No signals in this sector</p>
+            <Button variant="link" className="text-primary text-[10px] uppercase font-black" onClick={() => { setActiveCategory('All'); setSearchQuery(''); }}>Reset HUD</Button>
+          </div>
+        )}
       </div>
     </div>
   );
