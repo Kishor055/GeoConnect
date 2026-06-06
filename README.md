@@ -143,8 +143,8 @@ Join the evolution!
 ---
 
 ### 📌 Development Lead
-**YOUR NAME**  
-[GitHub Profile](https://github.com/YourUsername)
+**Kishor Vitthal Kakde**  
+[GitHub Profile](https://github.com/Kishor055)
 
 ---
 *Developed with ❤️ to unlock reality and connect the world, one coordinate at a time.*
