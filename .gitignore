@@ -1,38 +1,28 @@
 # dependencies
-/node_modules
-/.pnp
-.pnp.js
-
-# testing
-/coverage
+node_modules/
 
 # next.js
-/.next/
-/out/
+.next/
+out/
 
 # production
-/build
+build/
 
-# misc
-.DS_Store
-*.pem
+# env files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 
-# debug
+# firebase/config
+src/firebase/config.ts
+
+# logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# local env files
-.env*.local
-
-# vercel
-.vercel
-
-# typescript
-*.tsbuildinfo
-next-env.d.ts
-
-# Custom ignores
-api
-config.ts
-apikey 
+# system files
+.DS_Store
+*.local
