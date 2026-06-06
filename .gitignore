@@ -26,3 +26,4 @@ yarn-error.log*
 # system files
 .DS_Store
 *.local
+GEMINI_API_KEY
